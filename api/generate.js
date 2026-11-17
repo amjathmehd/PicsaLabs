@@ -1,5 +1,5 @@
 
-const MODEL = "gemini-3.5-flash-lite";
+const MODEL = "gemini-3.8-flash";
 
 function send(res, status, data) {
   return res.status(status).json(data);
