@@ -1,1 +1,459 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0b1114" />
+  <title>PicsaLabs — AI Logo & Brand Studio</title>
+  <meta name="description" content="Create logo concepts and brand kits with PicsaLabs AI." />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            ink: "#0b1114",
+            panel: "#111a1e",
+            mint: "#9df5d0",
+            muted: "#91a49d"
+          },
+          fontFamily: {
+            sans: ["Inter", "sans-serif"]
+          }
+        }
+      }
+    };
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    * { box-sizing: border-box; }
+    body { font-family: "DM Sans", sans-serif; background: #0b1114; color: #edf7f2; }
+    .display { font-family: "Space Grotesk", sans-serif; }
+    .glass { background: rgba(17,26,30,.82); border: 1px solid rgba(180,220,205,.10); }
+    .field { width:100%; background:#0b1316; border:1px solid #263630; border-radius:12px; padding:13px 14px; color:#edf7f2; outline:none; }
+    .field:focus { border-color:#9df5d0; box-shadow:0 0 0 3px rgba(157,245,208,.09); }
+    .mint-btn { background:#9df5d0; color:#0b1712; font-weight:800; border-radius:12px; padding:13px 18px; transition:.2s; }
+    .mint-btn:hover { background:#c0ffe5; transform:translateY(-1px); }
+    .soft-btn { background:#1b2927; border:1px solid #31453d; border-radius:11px; padding:10px 14px; color:#d9eee4; }
+    .soft-btn:hover { border-color:#9df5d0; }
+    .nav-btn { display:flex; align-items:center; gap:12px; width:100%; padding:11px 13px; border-radius:11px; color:#91a49d; text-align:left; }
+    .nav-btn.active,.nav-btn:hover { color:#c7ffe5; background:#1b3029; }
+    .dot { width:7px; height:7px; border-radius:50%; background:#9df5d0; box-shadow:0 0 12px #9df5d0; }
+    .swatch { width:100%; height:42px; border-radius:9px; border:1px solid #ffffff22; cursor:pointer; }
+    .logo-stage { background:radial-gradient(circle at 50% 40%,#20352e 0%,#14201e 42%,#10191b 100%); }
+    .loader { width:18px;height:18px;border:2px solid #244238;border-top-color:#9df5d0;border-radius:50%;animation:spin .7s linear infinite; }
+    @keyframes spin { to { transform:rotate(360deg); } }
+    .hidden-page { display:none; }
+    .logo-preview svg { max-width:100%; max-height:100%; }
+    input[type=color] { width:100%; height:42px; border:0; background:transparent; cursor:pointer; }
+    @media(max-width:800px) {
+      #sidebar { display:none; }
+      #mobileNav { display:flex; }
+      main { padding:20px !important; }
+    }
+  </style>
+</head>
+
+<body class="min-h-screen">
+<div class="flex min-h-screen">
+  <aside id="sidebar" class="w-64 shrink-0 border-r border-white/5 p-5 flex flex-col">
+    <a href="#" class="flex items-center gap-3 mb-10">
+      <div class="w-10 h-10 rounded-xl bg-mint text-ink grid place-items-center font-black text-xl">P</div>
+      <div>
+        <div class="display font-bold text-xl tracking-tight">PicsaLabs</div>
+        <div class="text-xs text-muted">AI BRAND STUDIO</div>
+      </div>
+    </a>
+
+    <div class="text-[10px] tracking-[.2em] text-muted font-bold mb-3 px-3">WORKSPACE</div>
+    <nav class="space-y-1">
+      <button class="nav-btn active" data-page="create"><i data-lucide="sparkles" size="18"></i> Create brand</button>
+      <button class="nav-btn" data-page="brand"><i data-lucide="palette" size="18"></i> Brand kit</button>
+      <button class="nav-btn" data-page="ideas"><i data-lucide="lightbulb" size="18"></i> Name ideas</button>
+    </nav>
+
+    <div class="mt-auto glass rounded-2xl p-4">
+      <div class="flex items-center gap-2 text-sm font-semibold"><span class="dot"></span> Free workspace</div>
+      <p class="text-xs text-muted mt-2 leading-relaxed">Your designs are stored in this browser. Export your work to keep a copy.</p>
+      <div class="mt-4 text-xs text-muted">Today's browser generations</div>
+      <div class="text-2xl display font-bold mt-1"><span id="usageCount">0</span><span class="text-sm text-muted font-normal"> / 5</span></div>
+    </div>
+  </aside>
+
+  <main class="flex-1 min-w-0 p-8 lg:p-10">
+    <header class="flex justify-between items-center mb-10">
+      <div>
+        <div class="text-xs text-muted mb-1">YOUR CREATIVE WORKSPACE</div>
+        <h1 class="display text-2xl md:text-3xl font-bold" id="pageHeading">Create your brand</h1>
+      </div>
+      <div class="flex items-center gap-2 text-xs text-muted glass rounded-full px-4 py-2">
+        <span class="dot"></span> AI studio
+      </div>
+    </header>
+
+    <!-- CREATE PAGE -->
+    <section id="page-create" class="page">
+      <div class="grid xl:grid-cols-[390px_1fr] gap-6">
+        <div class="glass rounded-2xl p-6 h-fit">
+          <div class="flex items-center gap-2 mb-2"><i data-lucide="wand-sparkles" class="text-mint"></i><h2 class="font-bold text-lg">Brand brief</h2></div>
+          <p class="text-sm text-muted mb-6">Tell us about your brand. AI will create a logo concept and starter brand kit.</p>
+
+          <form id="brandForm" class="space-y-4">
+            <div>
+              <label class="block text-sm font-semibold mb-2" for="brandName">Brand name</label>
+              <input id="brandName" class="field" placeholder="e.g. Nova Studio" maxlength="40" required />
+            </div>
+            <div>
+              <label class="block text-sm font-semibold mb-2" for="brandDesc">What does your brand do?</label>
+              <textarea id="brandDesc" class="field min-h-24 resize-y" placeholder="Describe your business, product or idea..." maxlength="500" required></textarea>
+            </div>
+            <div>
+              <label class="block text-sm font-semibold mb-2" for="brandStyle">Visual style</label>
+              <select id="brandStyle" class="field">
+                <option>Minimalist</option>
+                <option>Gaming / Esports</option>
+                <option>Luxury</option>
+                <option>Technology</option>
+                <option>Vintage</option>
+                <option>Playful</option>
+                <option>Modern corporate</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-semibold mb-2" for="brandColor">Preferred main color</label>
+              <select id="brandColor" class="field">
+                <option value="emerald green and mint">Emerald & mint</option>
+                <option value="blue and purple">Blue & purple</option>
+                <option value="black and gold">Black & gold</option>
+                <option value="orange and cream">Orange & cream</option>
+                <option value="pink and lavender">Pink & lavender</option>
+                <option value="let AI choose">Let AI choose</option>
+              </select>
+            </div>
+            <button id="generateBtn" class="mint-btn w-full flex justify-center items-center gap-2" type="submit">
+              <i data-lucide="sparkles" size="17"></i> Generate my brand
+            </button>
+            <p class="text-[11px] text-muted text-center">AI requests may be subject to Google AI Studio usage limits.</p>
+          </form>
+          <div id="errorBox" class="hidden mt-4 text-sm text-red-300 bg-red-950/30 border border-red-900 rounded-xl p-3"></div>
+        </div>
+
+        <div class="space-y-5">
+          <div class="glass rounded-2xl overflow-hidden">
+            <div class="flex justify-between items-center p-5 border-b border-white/5">
+              <div><h2 class="font-bold">Logo preview</h2><p class="text-xs text-muted mt-1">Your generated vector concept</p></div>
+              <span id="resultStatus" class="text-xs text-muted">Waiting for your brief</span>
+            </div>
+            <div class="logo-stage min-h-[330px] grid place-items-center p-8">
+              <div id="logoPreview" class="logo-preview w-full max-w-md h-56 flex items-center justify-center text-center text-muted">
+                <div><div class="w-16 h-16 rounded-2xl border border-mint/30 grid place-items-center mx-auto mb-4 text-mint"><i data-lucide="shapes" size="30"></i></div><p class="font-semibold text-white">Your logo appears here</p><p class="text-xs mt-2">Complete the brand brief to get started</p></div>
+              </div>
+            </div>
+            <div class="flex flex-wrap gap-2 p-4 border-t border-white/5">
+              <button id="downloadSvg" class="soft-btn text-sm" disabled><i data-lucide="download" size="15" class="inline mr-1"></i> SVG</button>
+              <button id="downloadPng" class="soft-btn text-sm" disabled><i data-lucide="image" size="15" class="inline mr-1"></i> PNG</button>
+              <button id="copySvg" class="soft-btn text-sm" disabled><i data-lucide="copy" size="15" class="inline mr-1"></i> Copy SVG</button>
+            </div>
+          </div>
+
+          <div class="grid md:grid-cols-2 gap-5">
+            <div class="glass rounded-2xl p-5">
+              <h3 class="font-bold mb-3">Brand colors</h3>
+              <div id="palette" class="grid grid-cols-5 gap-2">
+                <div class="col-span-5 text-xs text-muted">Your color palette will appear here.</div>
+              </div>
+            </div>
+            <div class="glass rounded-2xl p-5">
+              <h3 class="font-bold mb-3">Typography direction</h3>
+              <div id="fonts" class="text-sm text-muted">Your font recommendations will appear here.</div>
+            </div>
+          </div>
+          <div class="glass rounded-2xl p-5">
+            <h3 class="font-bold mb-3">Brand voice & slogans</h3>
+            <div id="slogans" class="text-sm text-muted">Your slogan ideas will appear here.</div>
+            <div id="bio" class="text-sm text-muted mt-4"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- BRAND KIT PAGE -->
+    <section id="page-brand" class="page hidden-page">
+      <div class="glass rounded-2xl p-6">
+        <div class="flex items-center gap-2 mb-2"><i data-lucide="palette" class="text-mint"></i><h2 class="text-xl font-bold">Brand kit editor</h2></div>
+        <p class="text-sm text-muted mb-6">Adjust the generated brand colors and export your logo. Generate a brand first.</p>
+        <div id="brandEditor" class="text-sm text-muted">No brand kit yet.</div>
+      </div>
+    </section>
+
+    <!-- NAME IDEAS PAGE -->
+    <section id="page-ideas" class="page hidden-page">
+      <div class="glass rounded-2xl p-6 max-w-2xl">
+        <div class="flex items-center gap-2 mb-2"><i data-lucide="lightbulb" class="text-mint"></i><h2 class="text-xl font-bold">AI brand name ideas</h2></div>
+        <p class="text-sm text-muted mb-6">Describe your business and get original name suggestions.</p>
+        <form id="nameForm" class="space-y-4">
+          <textarea id="nameDescription" class="field min-h-28" placeholder="Example: A modern clothing brand for young creatives..." maxlength="500" required></textarea>
+          <button id="nameBtn" class="mint-btn w-full" type="submit">Generate name ideas</button>
+        </form>
+        <div id="nameResults" class="mt-6 space-y-3"></div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<nav id="mobileNav" class="hidden fixed bottom-0 left-0 right-0 z-20 bg-[#101a1d] border-t border-white/10 p-2 justify-around">
+  <button class="nav-btn active !w-auto !text-xs" data-page="create"><i data-lucide="sparkles" size="16"></i>Create</button>
+  <button class="nav-btn !w-auto !text-xs" data-page="brand"><i data-lucide="palette" size="16"></i>Brand kit</button>
+  <button class="nav-btn !w-auto !text-xs" data-page="ideas"><i data-lucide="lightbulb" size="16"></i>Name ideas</button>
+</nav>
+
+<script>
+  lucide.createIcons();
+
+  const $ = (id) => document.getElementById(id);
+  const today = new Date().toISOString().slice(0,10);
+  const usageKey = "picsalabs_usage_" + today;
+  let brandData = null;
+  let currentSvg = "";
+
+  function usage() {
+    const count = Number(localStorage.getItem(usageKey) || 0);
+    $("usageCount").textContent = count;
+    return count;
+  }
+  usage();
+
+  function setBusy(button, busy, label) {
+    button.disabled = busy;
+    button.innerHTML = busy
+      ? '<span class="loader"></span> Working...'
+      : label;
+  }
+
+  function showError(message) {
+    $("errorBox").textContent = message;
+    $("errorBox").classList.remove("hidden");
+  }
+
+  function clearError() {
+    $("errorBox").classList.add("hidden");
+    $("errorBox").textContent = "";
+  }
+
+  async function callAI(payload) {
+    const response = await fetch("/api/generate", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+
+    const result = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(result.error || "The AI request failed. Please try again.");
+    return result;
+  }
+
+  function cleanSvg(svg) {
+    if (typeof svg !== "string" || !svg.trim().startsWith("<svg")) {
+      throw new Error("The AI did not return a valid SVG logo. Please generate again.");
+    }
+    if (/<script|foreignObject|<iframe|onload\s*=|onerror\s*=|javascript:/i.test(svg)) {
+      throw new Error("The returned logo contained unsupported content. Please generate again.");
+    }
+    if (/<image\b|<use\b|https?:\/\//i.test(svg)) {
+      throw new Error("The returned logo used external content. Please generate again.");
+    }
+    return svg;
+  }
+
+  function downloadFile(content, filename, type) {
+    const blob = new Blob([content], { type });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  function updateDownloads(enabled) {
+    ["downloadSvg","downloadPng","copySvg"].forEach(id => $(id).disabled = !enabled);
+  }
+
+  function renderBrand(data) {
+    brandData = data;
+    currentSvg = cleanSvg(data.svgCode);
+    $("logoPreview").innerHTML = currentSvg;
+    $("resultStatus").textContent = "Brand concept ready";
+    updateDownloads(true);
+
+    const colors = Array.isArray(data.colors) ? data.colors.slice(0,5) : [];
+    $("palette").innerHTML = colors.map((c, i) => `
+      <div class="text-center">
+        <div class="swatch" style="background:${escapeHtml(c.hex)}" title="${escapeHtml(c.name)}"></div>
+        <div class="text-[10px] text-muted mt-2">${escapeHtml(c.hex)}</div>
+      </div>`).join("");
+
+    $("fonts").innerHTML = `
+      <div class="font-semibold text-white">${escapeHtml(data.fonts?.heading || "Modern Sans")}</div>
+      <p class="text-xs mt-1 mb-3">${escapeHtml(data.fonts?.headingReason || "")}</p>
+      <div class="font-semibold text-white">${escapeHtml(data.fonts?.body || "Clean Sans")}</div>
+      <p class="text-xs mt-1">${escapeHtml(data.fonts?.bodyReason || "")}</p>`;
+
+    $("slogans").innerHTML = (data.slogans || []).map(s => `<div class="py-2 border-b border-white/5">“${escapeHtml(s)}”</div>`).join("");
+    $("bio").textContent = data.socialBio ? "Social bio: " + data.socialBio : "";
+
+    $("brandEditor").innerHTML = `
+      <div class="grid md:grid-cols-2 gap-6">
+        <div><h3 class="text-white font-bold mb-3">Your logo</h3><div class="logo-stage rounded-xl p-8 min-h-48 grid place-items-center logo-preview">${currentSvg}</div></div>
+        <div><h3 class="text-white font-bold mb-3">Edit brand colors</h3><div class="space-y-3">
+          ${colors.map((c,i)=>`<label class="flex items-center gap-3"><input type="color" data-color-index="${i}" value="${escapeHtml(c.hex)}" class="max-w-14"><span>${escapeHtml(c.name)}</span><span class="ml-auto text-xs text-muted" id="colorValue${i}">${escapeHtml(c.hex)}</span></label>`).join("")}
+        </div></div>
+      </div>
+      <div class="flex flex-wrap gap-2 mt-5"><button class="soft-btn" id="editorSvg">Download SVG</button><button class="soft-btn" id="editorPng">Download PNG</button></div>`;
+
+    $("brandEditor").querySelectorAll("[data-color-index]").forEach(input => {
+      input.addEventListener("input", () => {
+        const index = Number(input.dataset.colorIndex);
+        const old = colors[index].hex;
+        const value = input.value;
+        colors[index].hex = value;
+        $("colorValue"+index).textContent = value;
+        currentSvg = currentSvg.split(old).join(value);
+        $("logoPreview").innerHTML = currentSvg;
+        document.querySelectorAll("#brandEditor .logo-preview").forEach(el => el.innerHTML = currentSvg);
+        renderPaletteOnly(colors);
+      });
+    });
+    $("editorSvg").onclick = () => downloadFile(currentSvg, "picsalabs-logo.svg", "image/svg+xml");
+    $("editorPng").onclick = exportPng;
+    renderPaletteOnly(colors);
+  }
+
+  function renderPaletteOnly(colors) {
+    $("palette").innerHTML = colors.map(c => `<div class="text-center"><div class="swatch" style="background:${escapeHtml(c.hex)}"></div><div class="text-[10px] text-muted mt-2">${escapeHtml(c.hex)}</div></div>`).join("");
+  }
+
+  function escapeHtml(value) {
+    return String(value ?? "").replace(/[&<>"']/g, ch => ({
+      "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;"
+    }[ch]));
+  }
+
+  async function exportPng() {
+    if (!currentSvg) return;
+    try {
+      const svgBlob = new Blob([currentSvg], {type:"image/svg+xml;charset=utf-8"});
+      const url = URL.createObjectURL(svgBlob);
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        canvas.width = 1024;
+        canvas.height = 1024;
+        const ctx = canvas.getContext("2d");
+        ctx.clearRect(0,0,1024,1024);
+        const scale = Math.min(900/img.width,900/img.height);
+        const w = img.width*scale, h = img.height*scale;
+        ctx.drawImage(img,(1024-w)/2,(1024-h)/2,w,h);
+        URL.revokeObjectURL(url);
+        canvas.toBlob(blob => {
+          if (!blob) return alert("PNG export failed.");
+          const pngUrl = URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = pngUrl; a.download = "picsalabs-logo.png"; a.click();
+          URL.revokeObjectURL(pngUrl);
+        },"image/png");
+      };
+      img.onerror = () => { URL.revokeObjectURL(url); alert("Could not export this SVG as PNG."); };
+      img.src = url;
+    } catch { alert("PNG export failed."); }
+  }
+
+  $("downloadSvg").onclick = () => currentSvg && downloadFile(currentSvg, "picsalabs-logo.svg", "image/svg+xml");
+  $("downloadPng").onclick = exportPng;
+  $("copySvg").onclick = async () => {
+    try { await navigator.clipboard.writeText(currentSvg); $("copySvg").textContent = "Copied!"; }
+    catch { alert("Clipboard access is not available in this browser."); }
+  };
+
+  $("brandForm").addEventListener("submit", async (event) => {
+    event.preventDefault();
+    clearError();
+
+    if (usage() >= 5) {
+      showError("You've reached the 5-generation browser limit for today. You can try again tomorrow.");
+      return;
+    }
+
+    const button = $("generateBtn");
+    const label = '<i data-lucide="sparkles" size="17"></i> Generate my brand';
+    setBusy(button, true, label);
+    $("resultStatus").textContent = "Creating your brand...";
+    try {
+      const result = await callAI({
+        action: "generate",
+        brandName: $("brandName").value.trim(),
+        description: $("brandDesc").value.trim(),
+        style: $("brandStyle").value,
+        color: $("brandColor").value
+      });
+      renderBrand(result);
+      localStorage.setItem(usageKey, String(usage()+1));
+      usage();
+    } catch (error) {
+      $("resultStatus").textContent = "Generation failed";
+      showError(error.message);
+    } finally {
+      setBusy(button, false, label);
+      lucide.createIcons();
+    }
+  });
+
+  $("nameForm").addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const button = $("nameBtn");
+    if (usage() >= 5) {
+      $("nameResults").textContent = "You've reached today's browser generation limit.";
+      return;
+    }
+    setBusy(button, true, "Generate name ideas");
+    $("nameResults").textContent = "Thinking of brand names...";
+    try {
+      const result = await callAI({action:"names", description:$("nameDescription").value.trim()});
+      $("nameResults").innerHTML = (result.names || []).map(n => `
+        <div class="glass rounded-xl p-4">
+          <div class="font-bold text-white">${escapeHtml(n.name)}</div>
+          <div class="text-xs text-muted mt-1">${escapeHtml(n.reason)}</div>
+          <button class="soft-btn text-xs mt-3" data-use-name="${escapeHtml(n.name)}">Use this name</button>
+        </div>`).join("");
+      $("nameResults").querySelectorAll("[data-use-name]").forEach(btn => {
+        btn.onclick = () => {
+          $("brandName").value = btn.dataset.useName;
+          showPage("create");
+        };
+      });
+      localStorage.setItem(usageKey, String(usage()+1));
+      usage();
+    } catch (error) {
+      $("nameResults").textContent = error.message;
+    } finally {
+      setBusy(button, false, "Generate name ideas");
+    }
+  });
+
+  function showPage(page) {
+    document.querySelectorAll(".page").forEach(el => el.classList.add("hidden-page"));
+    $("page-"+page).classList.remove("hidden-page");
+    document.querySelectorAll("[data-page]").forEach(btn => btn.classList.toggle("active", btn.dataset.page === page));
+    $("pageHeading").textContent = ({create:"Create your brand",brand:"Brand kit editor",ideas:"Brand name ideas"})[page];
+  }
+  document.querySelectorAll("[data-page]").forEach(btn => btn.addEventListener("click", () => showPage(btn.dataset.page)));
+</script>
+</body>
+</html>
+
